@@ -1,0 +1,7 @@
+.login.main {
+    background-image: url("https://picsum.photos/id/102/536/354?garyscale&blur=1");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+}
