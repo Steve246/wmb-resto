@@ -1,36 +1,45 @@
-import {Component} from "react";
+import { Component } from "react";
 import MenuForm from "../components/MenuForm";
 import MenuList from "../components/MenuList";
 
-class MenuView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            addedForm: false
-        };
-        this.menuService = this.props.service;
-    }
+import { useDeps } from "../../../shared/DepsContext";
 
-    navigateToForm = () => {
-        this.setState({
-            addedForm: true
-        })
-    }
+const MenuView = (props) => {
+  //   constructor(props) {
+  //     super(props);
+  //     this.state = {
+  //       addedForm: false,
+  //     };
+  //     this.menuService = this.props.service;
+  //   }
 
-    handleCancel = () => {
-        this.setState({
-            addedForm: false,
-        })
-    }
+  const { menuService } = useDeps();
 
-    render() {
-        return (
-            <>
-                {this.state.addedForm ? <MenuForm service={this.menuService} onCancelForm={this.handleCancel}/> :
-                    <MenuList service={this.menuService} onNavigateToForm={this.navigateToForm}/>}
-            </>
-        );
-    }
-}
+  const [addedForm, setAddedForm] = useState(false);
+
+  const navigateToForm = () => {
+    // this.setState({
+    //   addedForm: true,
+    // });
+    setAddedForm(true);
+  };
+
+  const handleCancel = () => {
+    // this.setState({
+    //   addedForm: false,
+    // });
+    setAddedForm(false);
+  };
+
+  return (
+    <>
+      {setAddedForm ? (
+        <MenuForm service={menuService} onCancelForm={handleCancel} />
+      ) : (
+        <MenuList service={menuService} onNavigateToForm={navigateToForm} />
+      )}
+    </>
+  );
+};
 
 export default MenuView;

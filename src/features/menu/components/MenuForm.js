@@ -3,26 +3,45 @@ import {menu} from "../../../model/menu";
 import {FormInput} from "../../../shared/components/forms/FormInput";
 import {FormContainer} from "../../../shared/components/containers/FormContainer";
 import {withLoading} from "../../../shared/hoc/withLoading";
+import { faKitchenSet } from "@fortawesome/free-solid-svg-icons";
 
-class MenuForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: '',
-            name: '',
-            price: 0,
-            isValid: false,
-            error: {id: '', name: '', price: ''}
-        };
-        this.service = this.props.service;
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+const MenuForm  = (props) => {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         id: '',
+    //         name: '',
+    //         price: 0,
+    //         isValid: false,
+    //         error: {id: '', name: '', price: ''}
+    //     };
+    //     this.service = this.props.service;
+    //     this.handleChange = this.handleChange.bind(this);
+    //     this.handleSubmit = this.handleSubmit.bind(this);
+    // }
 
-    handleChange(key, value) {
+    const [id, setId] = useState("");
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState(0);
+    const [isValid, setIsValid] = useState(false);
+    const [error, setError] = useState({
+        id: '', 
+        name: '', 
+        price: ''
+    });
+
+    const service = props.service
+
+    useEffect(() => {
+        handleSubmit();
+      }, []);
+
+    handleChange = (key, value) => {
         this.setState({
             [key]: value
         }, () => this.validate(key))
+
+        
     }
 
     async handleSubmit(e) {
