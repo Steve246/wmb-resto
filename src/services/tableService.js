@@ -59,10 +59,9 @@ export function tableService() {
     try {
         const response = await doPost({
           url: "/table/" + id,
-        
         });
         console.log("ini response await deleteTable", response);
-        return response
+        return response;
       } catch (e) {
         throw e;
       }

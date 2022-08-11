@@ -6,11 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import { DepsProvider } from "./shared/DepsContext";
 import { serviceFactory } from "./services/";
 
+import { apiClientFactory } from "./services/ApiClientFactory";
+
+const apiClient = apiClientFactory(clientInstance);
+const services = serviceFactory(apiClient);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <App />
+    <DepsProvider services={services}>
+      <App />
+    </DepsProvider>
   </React.StrictMode>
 );
 
