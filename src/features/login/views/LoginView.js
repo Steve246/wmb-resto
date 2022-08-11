@@ -15,6 +15,7 @@ import { withLoading } from "../../../shared/hoc/withLoading";
 import { withMessageBox } from "../../../shared/hoc/withMessageBox";
 import { compose } from "ramda";
 import { withUIState } from "../../../shared/hoc/withUIState";
+import { useAuth } from "../../../shared/hook/useAuth";
 
 class LoginView extends Component {
   constructor(props) {
@@ -80,6 +81,7 @@ class LoginView extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
+    const { login } = useAuth();
     const result = await this.props.handleFetch(async () => {
       const { username, password } = this.state;
       const response = await this.service.authenticate(
@@ -88,7 +90,8 @@ class LoginView extends Component {
       return response;
     });
     if (result) {
-      this.props.handleLoggedIn(true);
+      login("admin");
+      // this.props.handleLoggedIn(true);
     }
     this.clearForm();
   }
@@ -123,72 +126,6 @@ class LoginView extends Component {
   render() {
     const { username, password, error, isValid } = this.state;
     return (
-      // <div className="login main d-flex flex-column justify-content-center">
-      //   <Container>
-      //     <Row>
-      //       <Col sm={2} lg={8}></Col>
-      //       <Col sm={1} lg={4}>
-      //         <Card
-      //           style={{
-      //             width: "32rem",
-      //             backgroundColor: "whitesmoke",
-      //             borderRadius: "15px",
-      //           }}
-      //           className="p-3"
-      //         >
-      //           <Card.Body>
-      //             <Card.Title>
-      //               <h2>Sistem Informasi WMB</h2>
-      //             </Card.Title>
-      //             <Form onSubmit={this.handleSubmit}>
-      //               <Form.Group className="form-floating mb-3">
-      //                 <FloatingLabel label="Email">
-      //                   <Form.Control
-      //                     size="lg"
-      //                     type="email"
-      //                     placeholder="Masukan email"
-      //                     value={username}
-      //                     onChange={this.handleUsernameChange}
-      //                   />
-      //                 </FloatingLabel>
-      //                 <Form.Text className="text-danger">
-      //                   {error.email}
-      //                 </Form.Text>
-      //               </Form.Group>
-      //               <Form.Group className="form-floating mb-3">
-      //                 <FloatingLabel label="Password">
-      //                   <Form.Control
-      //                     size="lg"
-      //                     type="password"
-      //                     placeholder="Masukan Password"
-      //                     value={password}
-      //                     onChange={this.handlePasswordChange}
-      //                   />
-      //                 </FloatingLabel>
-      //                 <Form.Text className="text-danger">
-      //                   {error.password}
-      //                 </Form.Text>
-      //               </Form.Group>
-      //               <div className="d-grid">
-      //                 <Button
-      //                   size="lg"
-      //                   variant="primary"
-      //                   type="submit"
-      //                   disabled={!isValid}
-      //                 >
-      //                   Masuk
-      //                 </Button>
-      //               </div>
-      //             </Form>
-      //           </Card.Body>
-      //         </Card>
-      //       </Col>
-      //     </Row>
-      //   </Container>
-      // </div>
-
-      //   add new form
-
       <div className=" body-login">
         <div className="form-container">
           <form className="register-form" onSubmit={this.handleSubmit}>

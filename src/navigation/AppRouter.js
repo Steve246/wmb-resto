@@ -8,6 +8,9 @@ import {
 import HomeView from "../features/home/views/HomeView";
 import LoginView from "../features/login/views/LoginView";
 import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "../shared/hook/useAuth";
+import ProtectedRoute from "./ProtectedRoute";
+import Navigation from "./Navigation";
 
 class AppRouter extends Component {
   constructor(props) {
@@ -18,11 +21,11 @@ class AppRouter extends Component {
     };
     this.pages = props.presentationManager;
 
-    this.onNavigate = this.onNavigate.bind(this);
-    this.onLoggedIn = this.onLoggedIn.bind(this);
+    // this.onNavigate = this.onNavigate.bind(this);
+    // this.onLoggedIn = this.onLoggedIn.bind(this);
   }
 
-  onNavigate(newPage) {
+  onNavigate = (newPage) => {
     switch (newPage) {
       case DASHBOARD_PAGE:
         this.setState({
@@ -47,9 +50,9 @@ class AppRouter extends Component {
           currentPage: null,
         });
     }
-  }
+  };
 
-  onLoggedIn(isLoggedIn) {
+  onLoggedIn = (isLoggedIn) => {
     if (isLoggedIn) {
       this.setState({
         logged: true,
@@ -59,13 +62,55 @@ class AppRouter extends Component {
         logged: false,
       });
     }
-  }
+  };
+
+  // render() {
+  //   const { currentPage } = this.state;
+  //   return (
+  //     <div>
+  //       {this.state.logged ? (
+  //         <HomeView
+  //           handleNavigate={this.onNavigate}
+  //           currentPage={currentPage ? currentPage : <></>}
+  //         />
+  //       ) : (
+  //         <LoginView
+  //           service={this.pages.serviceManager.loginService}
+  //           handleLoggedIn={this.onLoggedIn}
+  //         />
+  //       )}
+  //     </div>
+  //   );
+  // }
 
   render() {
     const { currentPage } = this.state;
     return (
-      <div>
-        {this.state.logged ? (
+      <AuthProvider>
+        <Routes>
+          <Route
+            index
+            element={
+              <LoginView service={this.pages.serviceManager.loginService} />
+            }
+          />
+          <Route element={<ProtectedRoute />}>
+            <Route path="home" element={<Navigation />}>
+              <Route path="menu" element={this.onNavigate(MENU_PAGE)} />
+              <Route path="table" element={this.onNavigate(TABLE_PAGE)} />
+            </Route>
+          </Route>
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: "1rem" }}>
+                <p>Oopss... page not found</p>
+              </main>
+            }
+          />
+        </Routes>
+
+        {/* {this.state.logged ? (
           <HomeView
             handleNavigate={this.onNavigate}
             currentPage={currentPage ? currentPage : <></>}
@@ -75,8 +120,8 @@ class AppRouter extends Component {
             service={this.pages.serviceManager.loginService}
             handleLoggedIn={this.onLoggedIn}
           />
-        )}
-      </div>
+        )} */}
+      </AuthProvider>
     );
   }
 }
